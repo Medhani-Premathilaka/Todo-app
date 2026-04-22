@@ -1,121 +1,135 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import { useEffect, useState } from "react";
+import type { Todo } from "./types/todo";
+import {
+  getTodos,
+  createTodo,
+  updateTodo,
+  toggleDone,
+  deleteTodo,
+} from "./api/todos";
+import AddTodoForm from "./components/AddTodoForm";
+import TodoItem from "./components/TodoItem";
+import CompletionAlert from "./components/CompletionAlert";
 
-function App() {
-  const [count, setCount] = useState(0)
+export default function App() {
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [toast, setToast] = useState<{ id: string; title: string } | null>(
+    null,
+  );
+
+  useEffect(() => {
+    fetchTodos();
+  }, []);
+
+  const fetchTodos = async () => {
+    try {
+      const data = await getTodos();
+      setTodos(data);
+    } catch {
+      setError("Failed to load todos. Is the server running?");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleAdd = async (input: { title: string; description?: string }) => {
+    const newTodo = await createTodo(input);
+    setTodos((prev) => [newTodo, ...prev]);
+  };
+
+  const handleToggle = async (id: string) => {
+    const updated = await toggleDone(id);
+    setTodos((prev) => prev.map((t) => (t._id === id ? updated : t)));
+
+    if (updated.done) {
+      setToast({ id: updated._id, title: updated.title });
+    }
+  };
+
+  const handleUpdate = async (
+    id: string,
+    input: { title: string; description?: string },
+  ) => {
+    const updated = await updateTodo(id, input);
+    setTodos((prev) => prev.map((t) => (t._id === id ? updated : t)));
+  };
+
+  const handleDelete = async (id: string) => {
+    await deleteTodo(id);
+    setTodos((prev) => prev.filter((t) => t._id !== id));
+  };
+
+  const pending = todos.filter((t) => !t.done);
+  const completed = todos.filter((t) => t.done);
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-2xl mx-auto px-4 py-12">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900">My Todos</h1>
+          <p className="text-gray-500 text-sm mt-1">
+            {pending.length} remaining · {completed.length} completed
           </p>
         </div>
-        <button
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
 
-      <div className="ticks"></div>
+        <AddTodoForm onAdd={handleAdd} />
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+        {loading && (
+          <p className="text-center text-gray-400 text-sm py-12">Loading...</p>
+        )}
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+        {error && (
+          <p className="text-center text-red-400 text-sm py-12">{error}</p>
+        )}
+
+        {!loading && !error && todos.length === 0 && (
+          <p className="text-center text-gray-400 text-sm py-12">
+            No todos yet. Add one above!
+          </p>
+        )}
+
+        {pending.length > 0 && (
+          <div className="space-y-3 mb-8">
+            {pending.map((todo) => (
+              <TodoItem
+                key={todo._id}
+                todo={todo}
+                onToggle={handleToggle}
+                onUpdate={handleUpdate}
+                onDelete={handleDelete}
+              />
+            ))}
+          </div>
+        )}
+
+        {completed.length > 0 && (
+          <div>
+            <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">
+              Completed
+            </p>
+            <div className="space-y-3">
+              {completed.map((todo) => (
+                <TodoItem
+                  key={todo._id}
+                  todo={todo}
+                  onToggle={handleToggle}
+                  onUpdate={handleUpdate}
+                  onDelete={handleDelete}
+                />
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+      {toast && (
+        <CompletionAlert
+          key={toast.id}
+          title={toast.title}
+          onDone={() => setToast(null)}
+        />
+      )}
+    </div>
+  );
 }
-
-export default App
