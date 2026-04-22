@@ -1,5 +1,7 @@
 import { useState } from "react";
 import type { Todo, UpdateTodoInput } from "../types/todo";
+import { Pencil, Trash2 } from "lucide-react";
+import AlertModal from "./AlertModal";
 
 interface Props {
   todo: Todo;
@@ -18,6 +20,7 @@ export default function TodoItem({
   const [title, setTitle] = useState(todo.title);
   const [description, setDescription] = useState(todo.description);
   const [loading, setLoading] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   const handleSave = async () => {
     if (!title.trim()) return;
@@ -109,19 +112,35 @@ export default function TodoItem({
                     onClick={() => setIsEditing(true)}
                     className="text-xs text-gray-400 hover:text-blue-600 transition-colors"
                   >
-                    Edit
+                    <Pencil size={15} />
                   </button>
                 )}
                 <button
-                  onClick={() => onDelete(todo._id)}
+                  onClick={() => setShowDeleteConfirm(true)}
                   className="text-xs text-gray-400 hover:text-red-500 transition-colors"
+                  title="Delete"
                 >
-                  Delete
+                  <Trash2 size={15} />
                 </button>
               </div>
             </div>
           </div>
         </div>
+      )}
+      {showDeleteConfirm && (
+        <AlertModal
+          type="danger"
+          title="Delete Todo?"
+          message="You are about to delete"
+          subMessage={todo.title}
+          confirmLabel="Delete"
+          cancelLabel="Cancel"
+          onConfirm={() => {
+            setShowDeleteConfirm(false);
+            onDelete(todo._id);
+          }}
+          onCancel={() => setShowDeleteConfirm(false)}
+        />
       )}
     </div>
   );

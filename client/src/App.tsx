@@ -9,7 +9,7 @@ import {
 } from "./api/todos";
 import AddTodoForm from "./components/AddTodoForm";
 import TodoItem from "./components/TodoItem";
-import CompletionAlert from "./components/CompletionAlert";
+import AlertModal from "./components/AlertModal";
 
 export default function App() {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -124,10 +124,15 @@ export default function App() {
         )}
       </div>
       {toast && (
-        <CompletionAlert
-          key={toast.id}
-          title={toast.title}
-          onDone={() => setToast(null)}
+        <AlertModal
+          type="success"
+          title="Yey! 🎉"
+          message="You completed"
+          subMessage={toast.title}
+          confirmLabel="Awesome!"
+          autoClose={true}
+          onConfirm={() => setToast(null)}
+          onCancel={() => setToast(null)}
         />
       )}
     </div>
