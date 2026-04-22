@@ -28,7 +28,7 @@ export const updateTodo = async (req, res) => {
     const todo = await Todo.findByIdAndUpdate(
       req.params.id,
       { title, description },
-      { new: true, runValidators: true } // return updated doc + re-run schema validators
+      { new: true, runValidators: true } 
     );
     if (!todo) return res.status(404).json({ message: "Todo not found" });
     res.json(todo);
