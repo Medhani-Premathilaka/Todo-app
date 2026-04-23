@@ -52,16 +52,18 @@ The API will be running at `http://localhost:5000`
 | DELETE | /api/todos/:id         | Delete a todo          |
 
 ## Project Structure
-
+ 
+```
 server/
-├── server.js              # Entry point
+├── server.js                   # Entry point — starts the server
 └── src/
-├── index.js           # Express app setup
-├── config/
-│   └── db.js          # MongoDB connection
-├── models/
-│   └── todo.model.js  # Mongoose schema
-├── controllers/
-│   └── todo.controller.js  # Business logic
-└── routes/
-└── todo.routes.js # Route definitions
+    ├── index.js                # Express app setup, middleware, routes
+    ├── config/
+    │   └── db.js               # MongoDB connection
+    ├── models/
+    │   └── todo.model.js       # Mongoose schema
+    ├── controllers/
+    │   └── todo.controller.js  # Business logic for each endpoint
+    └── routes/
+        └── todo.routes.js      # Route definitions
+```

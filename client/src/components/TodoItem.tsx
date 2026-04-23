@@ -5,9 +5,9 @@ import AlertModal from "./AlertModal";
 
 interface Props {
   todo: Todo;
-  onToggle: (id: string) => Promise<void>;
-  onUpdate: (id: string, input: UpdateTodoInput) => Promise<void>;
-  onDelete: (id: string) => Promise<void>;
+  onToggle: (id: string) => void;
+  onUpdate: (id: string, input: UpdateTodoInput) => void;
+  onDelete: (id: string) => void;
 }
 
 export default function TodoItem({
@@ -22,11 +22,11 @@ export default function TodoItem({
   const [loading, setLoading] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
-  const handleSave = async () => {
+  const handleSave = () => {
     if (!title.trim()) return;
     setLoading(true);
     try {
-      await onUpdate(todo._id, {
+      onUpdate(todo._id, {
         title: title.trim(),
         description: description.trim(),
       });

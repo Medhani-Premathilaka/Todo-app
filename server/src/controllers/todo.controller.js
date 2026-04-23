@@ -1,15 +1,5 @@
 import Todo from "../models/todo.model.js";
 
-// GET /api/todos
-export const getTodos = async (req, res) => {
-  try {
-    const todos = await Todo.find().sort({ createdAt: -1 });
-    res.json(todos);
-  } catch (error) {
-    res.status(500).json({ message: "Failed to fetch todos" });
-  }
-};
-
 // POST /api/todos
 export const createTodo = async (req, res) => {
   try {
@@ -18,6 +8,16 @@ export const createTodo = async (req, res) => {
     res.status(201).json(todo);
   } catch (error) {
     res.status(400).json({ message: error.message });
+  }
+};
+
+// GET /api/todos
+export const getTodos = async (req, res) => {
+  try {
+    const todos = await Todo.find().sort({ createdAt: -1 });
+    res.json(todos);
+  } catch (error) {
+    res.status(500).json({ message: "Failed to fetch todos" });
   }
 };
 

@@ -65,7 +65,6 @@ export default function AlertModal({
 
   return (
     <>
-      {/* Backdrop */}
       <div
         className={`fixed inset-0 z-40 bg-black transition-all duration-400 ${
           visible ? "opacity-40" : "opacity-0"
@@ -73,7 +72,6 @@ export default function AlertModal({
         onClick={handleCancel}
       />
 
-      {/* Modal */}
       <div
         className={`fixed inset-0 z-50 flex items-center justify-center pointer-events-none transition-all duration-400 ${
           visible ? "opacity-100 scale-100" : "opacity-0 scale-90"
@@ -81,7 +79,6 @@ export default function AlertModal({
       >
         <div className="bg-white rounded-3xl shadow-2xl px-8 py-8 max-w-sm w-full mx-4 pointer-events-auto text-center">
 
-          {/* Icon */}
           <div className="flex items-center justify-center mb-5">
             <div className={`w-20 h-20 rounded-full ${iconBgColor} flex items-center justify-center transition-all duration-500 ${visible ? "scale-100" : "scale-0"}`}>
               <div className={`w-14 h-14 rounded-full ${innerBgColor} flex items-center justify-center transition-all duration-500 delay-100 ${visible ? "scale-100" : "scale-0"}`}>
@@ -110,7 +107,6 @@ export default function AlertModal({
             </div>
           </div>
 
-          {/* Text */}
           <h2 className="text-xl font-bold text-gray-800 mb-2">{title}</h2>
           <p className="text-gray-500 text-sm mb-1">{message}</p>
           {subMessage && (
@@ -119,7 +115,6 @@ export default function AlertModal({
             </p>
           )}
 
-          {/* Buttons */}
           <div className={`flex gap-3 ${!cancelLabel ? "justify-center" : ""}`}>
             {cancelLabel && (
               <button

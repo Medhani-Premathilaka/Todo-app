@@ -2,7 +2,7 @@ import { useState } from "react";
 import type { CreateTodoInput } from "../types/todo";
 
 interface Props {
-  onAdd: (input: CreateTodoInput) => Promise<void>;
+  onAdd: (input: CreateTodoInput) => void;
 }
 
 export default function AddTodoForm({ onAdd }: Props) {
@@ -11,7 +11,7 @@ export default function AddTodoForm({ onAdd }: Props) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!title.trim()) {
       setError("Title is required");
@@ -20,7 +20,7 @@ export default function AddTodoForm({ onAdd }: Props) {
     setLoading(true);
     setError("");
     try {
-      await onAdd({ title: title.trim(), description: description.trim() });
+      onAdd({ title: title.trim(), description: description.trim() });
       setTitle("");
       setDescription("");
     } catch {
