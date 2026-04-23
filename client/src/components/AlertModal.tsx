@@ -56,12 +56,10 @@ export default function AlertModal({
 
   const isSuccess = type === "success";
 
-  const iconBgColor = isSuccess ? "bg-green-100" : "bg-red-100";
   const innerBgColor = isSuccess ? "bg-green-500" : "bg-red-500";
   const confirmBtnColor = isSuccess
     ? "bg-green-500 hover:bg-green-600"
     : "bg-red-500 hover:bg-red-600";
-  const subTextColor = isSuccess ? "text-green-600" : "text-gray-800";
 
   return (
     <>
@@ -77,11 +75,14 @@ export default function AlertModal({
           visible ? "opacity-100 scale-100" : "opacity-0 scale-90"
         }`}
       >
-        <div className="bg-white rounded-3xl shadow-2xl px-8 py-8 max-w-sm w-full mx-4 pointer-events-auto text-center">
-
+        <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl px-8 py-8 max-w-sm w-full mx-4 pointer-events-auto text-center transition-colors duration-400">
           <div className="flex items-center justify-center mb-5">
-            <div className={`w-20 h-20 rounded-full ${iconBgColor} flex items-center justify-center transition-all duration-500 ${visible ? "scale-100" : "scale-0"}`}>
-              <div className={`w-14 h-14 rounded-full ${innerBgColor} flex items-center justify-center transition-all duration-500 delay-100 ${visible ? "scale-100" : "scale-0"}`}>
+            <div
+              className={`w-20 h-20 rounded-full ${isSuccess ? "bg-green-100 dark:bg-green-900/30" : "bg-red-100 dark:bg-red-900/30"} flex items-center justify-center transition-all duration-500 ${visible ? "scale-100" : "scale-0"}`}
+            >
+              <div
+                className={`w-14 h-14 rounded-full ${innerBgColor} flex items-center justify-center transition-all duration-500 delay-100 ${visible ? "scale-100" : "scale-0"}`}
+              >
                 {isSuccess ? (
                   <svg
                     className={`w-7 h-7 text-white transition-all duration-300 delay-200 ${visible ? "opacity-100" : "opacity-0"}`}
@@ -90,7 +91,11 @@ export default function AlertModal({
                     stroke="currentColor"
                     strokeWidth={3}
                   >
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M5 13l4 4L19 7"
+                    />
                   </svg>
                 ) : (
                   <svg
@@ -100,17 +105,27 @@ export default function AlertModal({
                     stroke="currentColor"
                     strokeWidth={2}
                   >
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                    />
                   </svg>
                 )}
               </div>
             </div>
           </div>
 
-          <h2 className="text-xl font-bold text-gray-800 mb-2">{title}</h2>
-          <p className="text-gray-500 text-sm mb-1">{message}</p>
+          <h2 className="text-xl font-bold text-gray-800 dark:text-white mb-2">
+            {title}
+          </h2>
+          <p className="text-gray-500 dark:text-gray-400 text-sm mb-1">
+            {message}
+          </p>
           {subMessage && (
-            <p className={`font-semibold text-sm mb-7 truncate px-4 ${subTextColor}`}>
+            <p
+              className={`font-semibold text-sm mb-7 truncate px-4 ${isSuccess ? "text-green-600 dark:text-green-400" : "text-gray-800 dark:text-gray-200"}`}
+            >
               "{subMessage}"
             </p>
           )}
@@ -119,7 +134,7 @@ export default function AlertModal({
             {cancelLabel && (
               <button
                 onClick={handleCancel}
-                className="flex-1 py-3 rounded-2xl border border-gray-200 text-gray-600 text-sm font-semibold hover:bg-gray-50 transition-colors"
+                className="flex-1 py-3 rounded-2xl border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 text-sm font-semibold hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
               >
                 {cancelLabel}
               </button>

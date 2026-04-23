@@ -44,25 +44,25 @@ export default function TodoItem({
 
   return (
     <div
-      className={`bg-white rounded-2xl border p-5 transition-all ${todo.done ? "border-gray-100 opacity-60" : "border-gray-100 shadow-sm"}`}
+      className={`bg-white dark:bg-gray-800 rounded-2xl border p-5 transition-all duration-400 ${todo.done ? "border-gray-100 dark:border-gray-700 opacity-60" : "border-gray-100 dark:border-gray-700 shadow-sm"}`}
     >
       {isEditing ? (
         <div>
           <input
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm mb-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2 text-sm mb-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             rows={2}
-            className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm mb-3 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+            className="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg px-3 py-2 text-sm mb-3 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
           />
           <div className="flex justify-end gap-2 mt-2">
             <button
               onClick={handleCancel}
-              className="px-3 py-1.5 text-xs font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors"
+              className="px-3 py-1.5 text-xs font-medium text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-md transition-colors"
             >
               Cancel
             </button>
@@ -81,23 +81,23 @@ export default function TodoItem({
             type="checkbox"
             checked={todo.done}
             onChange={() => onToggle(todo._id)}
-            className="mt-1 h-4 w-4 rounded border-gray-300 text-blue-600 cursor-pointer"
+            className="mt-1 h-4 w-4 rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-blue-600 cursor-pointer focus:ring-blue-500 focus:ring-offset-gray-800"
           />
           <div className="flex-1 min-w-0">
             <p
-              className={`text-sm font-medium ${todo.done ? "line-through text-gray-400" : "text-gray-800"}`}
+              className={`text-sm font-medium ${todo.done ? "line-through text-gray-400 dark:text-gray-500" : "text-gray-800 dark:text-gray-100"}`}
             >
               {todo.title}
             </p>
             {todo.description && (
               <p
-                className={`text-xs mt-1 ${todo.done ? "text-gray-300" : "text-gray-500"}`}
+                className={`text-xs mt-1 ${todo.done ? "text-gray-300 dark:text-gray-600" : "text-gray-500 dark:text-gray-400"}`}
               >
                 {todo.description}
               </p>
             )}
             <div className="flex items-center justify-between mt-3">
-              <p className="text-xs text-gray-400">
+              <p className="text-xs text-gray-400 dark:text-gray-500">
                 {new Date(todo.createdAt).toLocaleString("en-US", {
                   month: "short",
                   day: "numeric",
@@ -110,14 +110,14 @@ export default function TodoItem({
                 {!todo.done && (
                   <button
                     onClick={() => setIsEditing(true)}
-                    className="text-xs text-gray-400 hover:text-blue-600 transition-colors"
+                    className="text-xs text-gray-400 dark:text-gray-500 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
                   >
                     <Pencil size={15} />
                   </button>
                 )}
                 <button
                   onClick={() => setShowDeleteConfirm(true)}
-                  className="text-xs text-gray-400 hover:text-red-500 transition-colors"
+                  className="text-xs text-gray-400 dark:text-gray-500 hover:text-red-500 dark:hover:text-red-400 transition-colors"
                   title="Delete"
                 >
                   <Trash2 size={15} />

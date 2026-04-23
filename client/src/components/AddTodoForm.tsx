@@ -31,12 +31,15 @@ export default function AddTodoForm({ onAdd }: Props) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-8">
-      <h2 className="text-lg font-semibold text-gray-800 mb-4">Add New Todo</h2>
+    <form
+      onSubmit={handleSubmit}
+      className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 mb-8 transition-colors duration-400"
+    >
+      <h2 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">
+        Add New Todo
+      </h2>
 
-      {error && (
-        <p className="text-red-500 text-sm mb-3">{error}</p>
-      )}
+      {error && <p className="text-red-500 text-sm mb-3">{error}</p>}
 
       <div className="mb-3">
         <input
@@ -44,7 +47,7 @@ export default function AddTodoForm({ onAdd }: Props) {
           placeholder="Title *"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </div>
 
@@ -54,7 +57,7 @@ export default function AddTodoForm({ onAdd }: Props) {
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           rows={2}
-          className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+          className="w-full border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
         />
       </div>
 

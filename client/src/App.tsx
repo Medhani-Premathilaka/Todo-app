@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Sun, Moon } from "lucide-react";
 import type { Todo } from "./types/todo";
 import {
   getTodos,
@@ -10,6 +11,7 @@ import {
 import AddTodoForm from "./components/AddTodoForm";
 import TodoItem from "./components/TodoItem";
 import AlertModal from "./components/AlertModal";
+import { useDarkMode } from "./hooks/useDarkMode";
 
 export default function App() {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -18,6 +20,7 @@ export default function App() {
   const [toast, setToast] = useState<{ id: string; title: string } | null>(
     null,
   );
+  const { dark, toggleDark } = useDarkMode();
 
   useEffect(() => {
     fetchTodos();
@@ -65,13 +68,24 @@ export default function App() {
   const completed = todos.filter((t) => t.done);
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-400">
       <div className="max-w-2xl mx-auto px-4 py-12">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">My Todos</h1>
-          <p className="text-gray-500 text-sm mt-1">
-            {pending.length} remaining · {completed.length} completed
-          </p>
+        <div className="mb-8 flex justify-between items-center">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+              My Todos
+            </h1>
+            <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">
+              {pending.length} remaining · {completed.length} completed
+            </p>
+          </div>
+          <button
+            onClick={toggleDark}
+            className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors text-gray-500 dark:text-gray-400"
+            aria-label="Toggle dark mode"
+          >
+            {dark ? <Sun size={18} /> : <Moon size={18} />}
+          </button>
         </div>
 
         <AddTodoForm onAdd={handleAdd} />
