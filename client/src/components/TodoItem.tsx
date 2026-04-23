@@ -97,7 +97,7 @@ export default function TodoItem({
               </p>
             )}
             <div className="flex items-center justify-between mt-3">
-              <p className="text-xs text-gray-400 dark:text-gray-500">
+              <p className="text-xs text-gray-900 dark:text-gray-100">
                 {new Date(todo.createdAt).toLocaleString("en-US", {
                   month: "short",
                   day: "numeric",

@@ -1,67 +1,21 @@
-import { useEffect, useState } from "react";
 import { Sun, Moon } from "lucide-react";
-import type { Todo } from "./types/todo";
-import {
-  getTodos,
-  createTodo,
-  updateTodo,
-  toggleDone,
-  deleteTodo,
-} from "./api/todos";
+import { useTodos } from "./hooks/useTodos";
+import { useDarkMode } from "./hooks/useDarkMode";
 import AddTodoForm from "./components/AddTodoForm";
 import TodoItem from "./components/TodoItem";
 import AlertModal from "./components/AlertModal";
-import { useDarkMode } from "./hooks/useDarkMode";
+import { useState } from "react";
 
 export default function App() {
-  const [todos, setTodos] = useState<Todo[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-  const [toast, setToast] = useState<{ id: string; title: string } | null>(
-    null,
-  );
+  const { todos, loading, error, handleAdd, handleToggle, handleUpdate, handleDelete } = useTodos();
   const { dark, toggleDark } = useDarkMode();
+  const [toast, setToast] = useState<{ id: string; title: string } | null>(null);
 
-  useEffect(() => {
-    fetchTodos();
-  }, []);
-
-  const fetchTodos = async () => {
-    try {
-      const data = await getTodos();
-      setTodos(data);
-    } catch {
-      setError("Failed to load todos. Is the server running?");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleAdd = async (input: { title: string; description?: string }) => {
-    const newTodo = await createTodo(input);
-    setTodos((prev) => [newTodo, ...prev]);
-  };
-
-  const handleToggle = async (id: string) => {
-    const updated = await toggleDone(id);
-    setTodos((prev) => prev.map((t) => (t._id === id ? updated : t)));
-
-    if (updated.done) {
+  const onToggle = async (id: string) => {
+    const updated = await handleToggle(id);
+    if (updated?.done) {
       setToast({ id: updated._id, title: updated.title });
     }
-  };
-
-  const handleUpdate = async (
-    id: string,
-    input: { title: string; description?: string },
-  ) => {
-    const updated = await updateTodo(id, input);
-    setTodos((prev) => prev.map((t) => (t._id === id ? updated : t)));
-  };
-
-  const handleDelete = async (id: string) => {
-    await deleteTodo(id);
-    setTodos((prev) => prev.filter((t) => t._id !== id));
   };
 
   const pending = todos.filter((t) => !t.done);
@@ -93,13 +47,11 @@ export default function App() {
         {loading && (
           <p className="text-center text-gray-400 text-sm py-12">Loading...</p>
         )}
-
         {error && (
           <p className="text-center text-red-400 text-sm py-12">{error}</p>
         )}
-
         {!loading && !error && todos.length === 0 && (
-          <p className="text-center text-gray-400 text-sm py-12">
+          <p className="text-center text-gray-400 dark:text-gray-600 text-sm py-12">
             No todos yet. Add one above!
           </p>
         )}
@@ -110,7 +62,7 @@ export default function App() {
               <TodoItem
                 key={todo._id}
                 todo={todo}
-                onToggle={handleToggle}
+                onToggle={onToggle}
                 onUpdate={handleUpdate}
                 onDelete={handleDelete}
               />
@@ -128,7 +80,7 @@ export default function App() {
                 <TodoItem
                   key={todo._id}
                   todo={todo}
-                  onToggle={handleToggle}
+                  onToggle={onToggle}
                   onUpdate={handleUpdate}
                   onDelete={handleDelete}
                 />
@@ -137,6 +89,7 @@ export default function App() {
           </div>
         )}
       </div>
+
       {toast && (
         <AlertModal
           type="success"
